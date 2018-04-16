@@ -20,21 +20,34 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private FilterSecurityInterceptor filterSecurityInterceptor;
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        // javaconfig 配置是这样 set 进去的.
-        web.securityInterceptor(filterSecurityInterceptor);
-        web.privilegeEvaluator(new DefaultWebInvocationPrivilegeEvaluator(filterSecurityInterceptor));
-    }
+    private MyLogoutHandler myLogoutHandler;
+    
+    @Autowired
+    private MyLogoutSuccessHandler myLogoutSuccessHandler;
+//    @Autowired
+//    private FilterSecurityInterceptor filterSecurityInterceptor;
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        // javaconfig 配置是这样 set 进去的.
+//        web.securityInterceptor(filterSecurityInterceptor);
+//        web.privilegeEvaluator(new DefaultWebInvocationPrivilegeEvaluator(filterSecurityInterceptor));
+//    }
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**","/index","/").permitAll()
-                .antMatchers("/user/**").hasRole("USER")
-                .anyRequest().authenticated()
+                    .antMatchers("/css/**","/index","/").permitAll()
+                    .antMatchers("/user/**").hasRole("USER")
+                    .anyRequest().authenticated()
+                .and()
+                .logout()
+//                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/index")
+//                    .logoutSuccessHandler(myLogoutSuccessHandler)
+                    .invalidateHttpSession(true)
+//                    .addLogoutHandler(myLogoutHandler)
+//                    .deleteCookies(cookieNamesToClear)
                 .and()
                 .formLogin();
 //                .loginPage("/login")

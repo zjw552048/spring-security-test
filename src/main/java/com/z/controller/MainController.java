@@ -25,10 +25,10 @@ public class MainController {
         return "user/index";
     }
     
-    @RequestMapping("/login")
-    public String login() {
-        return "login";
-    }
+//    @RequestMapping("/login")
+//    public String login() {
+//        return "login";
+//    }
     
     @RequestMapping("/login-error")
     public String loginError(Model model) {
